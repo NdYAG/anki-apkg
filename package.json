@@ -5,7 +5,14 @@
   "repository": "git@github.com:NdYAG/anki-apkg.git",
   "author": "NdYAG <i@daix.me>",
   "license": "MIT",
+  "scripts": {
+    "start": "tsc --outDir lib src/*.ts",
+    "prepublish": "npm run start"
+  },
   "dependencies": {
-    "sqlite3": "^3.1.13"
+    "@types/node": "^9.4.6",
+    "archiver": "^2.1.1",
+    "better-sqlite3": "^4.1.0",
+    "sha1": "^1.1.1"
   }
 }
