@@ -2,7 +2,7 @@
 // https://github.com/ankidroid/Anki-Android/wiki/Database-Structure
 import * as sha1 from 'sha1'
 
-export function genDatabaseSQL(config: DeckConfig) {
+export function initDatabase(database: any, config: DeckConfig) {
   const current = config.id
   const deckId = current
   const modelId = deckId + 1
@@ -83,7 +83,7 @@ export function genDatabaseSQL(config: DeckConfig) {
     }
   }
   let decksConfig = {}
-  return `
+  let sql = `
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS col (
 	id	integer,
@@ -193,73 +193,29 @@ CREATE INDEX IF NOT EXISTS ix_cards_nid ON cards (
 );
 COMMIT;
 `
+  database.exec(sql)
 }
 
-export function genInsertionSQL(deck: DeckConfig, card: Card) {
+export function insertCard(database: any, deck: DeckConfig, card: Card) {
   const createTime = card.timestamp || +new Date()
   const cardId = createTime
   const noteId = cardId + 1
   const modelId = deck.id + 1
   const fieldsContent = card.content.join('\u001F')
   const sortField = card.content[0]
-  const SQL_CARD = `
-  INSERT INTO cards (
-    id,
-    nid,
-    did,
-    ord,
-    mod,
-    usn,
-    type,
-    queue,
-    due,
-    ivl,
-    factor,
-    reps,
-    lapses,
-    left,
-    odue,
-    odid,
-    flags,
-    data)
-    VALUES (
-      ${cardId},
-      ${noteId},
-      ${deck.id},
-      0,
-      ${createTime},
-      -1,
-      0,
-      0,
-      86400,0,0,0,0,0,0,0,0,'');
-`
-  const SQL_NOTE = `
-  INSERT INTO notes (
-    id,
-    guid,
-    mid,
-    mod,
-    usn,
-    tags,
-    flds,
-    sfld,
-    csum,
-    flags,
-    data) VALUES (
-      ${noteId},
-      '${cardId}',
-      ${modelId},
-      ${createTime},
-      -1,
-      '',
-      '${fieldsContent}',
-      '${sortField}',
-      ${parseInt(sha1(sortField).substr(0, 8), 16)},
-      0,
-      '');
-`
-  return {
-    SQL_CARD,
-    SQL_NOTE
-  }
+  const SQL_CARD = `INSERT INTO cards (id,nid,did,ord,mod,usn,type,queue,due,ivl,factor,reps,lapses,left,odue,odid,flags,data) VALUES (?,  ?,  ?,  0,  ?,  -1,  0,  0,  86400,0,0,0,0,0,0,0,0,'')`
+  database.prepare(SQL_CARD).run(cardId, noteId, deck.id, createTime)
+
+  const SQL_NOTE = `INSERT INTO notes (id,guid,mid,mod,usn,tags,flds,sfld,csum,flags,data) VALUES (?,  ?,  ?,  ?,  -1,  '',  ?,  ?,  ?,  0,  '');`
+  database
+    .prepare(SQL_NOTE)
+    .run(
+      noteId,
+      `${cardId}`,
+      modelId,
+      createTime,
+      fieldsContent,
+      sortField,
+      parseInt(sha1(sortField).substr(0, 8), 16)
+    )
 }
