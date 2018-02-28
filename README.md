@@ -2,7 +2,7 @@
 
 anki-apkg is highly inspired by [anki-apkg-export](https://github.com/repeat-space/anki-apkg-export/) and works almost the same, then why a new package?
 
-Because I'm not satisfied with only creating `{{front}}` and `{{back}}` field for a card, therefore this package is created to make it possible to customize fields (and any other variables of a deck or card in the future).
+Because I'm not satisfied with only creating `{{front}}` and `{{back}}` field for a card, this package is created to make it possible to customize fields (and any other variables of a deck or card in the future).
 
 ```
 npm install anki-apkg
