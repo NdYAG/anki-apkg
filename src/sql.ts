@@ -34,7 +34,7 @@ export function initDatabase(database: any, config: DeckConfig) {
   let models = {
     [modelId]: {
       vers: [],
-      name: 'VocabularyBuilder',
+      name: config.name,
       tags: [],
       did: deckId,
       usn: -1,
@@ -46,7 +46,7 @@ export function initDatabase(database: any, config: DeckConfig) {
       tmpls: [
         {
           afmt: config.card.template.answer,
-          name: 'VocabularyBuilder',
+          name: config.name,
           qfmt: config.card.template.question,
           did: null,
           ord: 0,
