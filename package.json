@@ -1,12 +1,13 @@
 {
   "name": "anki-apkg",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "lib/index.js",
+  "types": "lib/typings.d.ts",
   "repository": "git@github.com:NdYAG/anki-apkg.git",
   "author": "NdYAG <i@daix.me>",
   "license": "MIT",
   "scripts": {
-    "start": "tsc --outDir lib src/*.ts",
+    "start": "tsc --outDir lib src/*.ts && cp src/typings.d.ts lib",
     "prepublish": "npm run start"
   },
   "dependencies": {
