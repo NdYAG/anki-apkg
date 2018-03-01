@@ -6,12 +6,12 @@ export function initDatabase(database: any, config: DeckConfig) {
   const current = config.id
   const deckId = current
   const modelId = deckId + 1
-  const fields = config.card.fields.map(field => ({
+  const fields = config.card.fields.map((field, ord) => ({
     size: 20,
     name: field,
     media: [],
     rtl: false,
-    ord: 0,
+    ord,
     font: 'Arial',
     sticky: false
   }))
