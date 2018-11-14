@@ -9,7 +9,7 @@ export class APKG {
   private db: any
   private deck: DeckConfig
   private dest: string
-  private media: Array<string>
+  private mediaFiles: Array<string>
   constructor(private config: DeckConfig) {
     this.dest = join(__dirname, config.name)
     this.clean()
